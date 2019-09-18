@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+</head>
+
+<body>
+    <form method="post">
+        <table border="1">
+            <%for(var i = 0; i < list.length; i++){%>
+            <input type="hidden" name='no' value='<%=list[i].no%>'>
+            <input type="hidden" name='writer' value='<%=list[i].writer%>'>
+            <tr>
+                <td>게시물번호</td>
+                <td><%=list[i].no%></td>
+            </tr>
+            <tr>
+                <td>작성자</td>
+                <td><%=list[i].writer%></td>
+            </tr>
+            <tr>
+                <td>제목</td>
+                <td><input type='text' name='title' value='<%=list[i].title%>'></td>
+            </tr>
+            <tr>
+                <td>내용</td>
+                <td><textarea name="content" ><%=list[i].content%></textarea></td>
+            <tr>
+                <td >장소</td>
+                <td><input type='text' name='place' value='<%=list[i].place%>'></td>
+            </tr>
+            <tr>
+                <td rowspan="3">날짜</td>
+                <td><input type='text' name='year' value='<%=list[i].year%>'></td>
+            </tr>
+            <tr>
+                <td><input type='text' name='month' value='<%=list[i].month%>'></td>
+            </tr>
+            <tr>
+                <td><input type='text' name='day' value='<%=list[i].day%>'></td>
+            </tr>
+            <tr>
+                <td>시작시간</td>
+                <td><input type='text' name='time_from' value='<%=list[i].time_from%>'></td>
+            </tr>
+            <tr>
+                <td>종료시간</td>
+                <td><input type='text' name='time_to' value='<%=list[i].time_to%>'></td>
+            </tr>
+            <tr>
+                <td>인원수</td>
+                <td><input type='text' name='person' value='<%=list[i].person%>'></td>
+            </tr>
+            <tr>
+                <td>연령대</td>
+                <td><input type='text' name='age' value='<%=list[i].age%>'></td>
+            </tr>
+            <tr>
+                <td>수준</td>
+                <td><input type='text' name='level' value='<%=list[i].level%>'></td>
+            </tr>
+            <tr>
+                <td>회비</td>
+                <td><input type='text' name='due' value='<%=list[i].due%>'></td>
+            </tr>
+        </table>
+        <button type='button' onclick="history.back()">취소</button><input type='submit' value="완료">
+    </form>
+    <%}%>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script>
+
+</script>
+</html>

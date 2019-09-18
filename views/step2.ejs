@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+</head>
+<body>
+    <form id='form1' action = 'step2' method='post'>
+        <input type='hidden' name='isTeam' value="<%=isTeam%>">
+        <input type="text" id='id' name="id" placeholder="id"><label id='msgbox'></label><br>
+        <input type="text" name="pw" placeholder="pw"><br>
+        <input type="text" name="name" placeholder="name"><br>
+        <input type="text" name="team_name" value="<%=team_name%>" readonly><br>
+        <input type="text" name="account" placeholder="account"><br>
+        <input type="text" name="wallet" placeholder="wallet"><br>
+        <input type='submit' value="hi">
+        <!-- <button type="button" id='submit' >ㄱㄱㄱㄱ</button> -->
+    </form>
+</body>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script>
+
+    var idChk=false
+    $('#id').on('keyup',function(){
+        var input = $('#id').val()
+        $.ajax({
+            url: '/isVaildId',
+            type: 'post',
+            data:{ id:input},
+            dataType:'json',
+            success:function(data){
+                if(data.length > 0) {
+                    idChk = false
+                    $('#msgbox').text('존재하는 아이디')
+                }else{
+                    idChk = true
+                    $('#msgbox').text('사용 가능한 아이디')
+                }
+            }
+        })
+    })
+    $('form').submit(function(){
+        if(!idChk) {
+            alert('내용을 확인하세요')
+            return false
+        }
+    })
+</script>
+
+</html>

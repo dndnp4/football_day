@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+</head>
+
+<body>
+    <form method="post">
+        <input type='text' name='writer'><br>
+        <input type='text' name='title'><br>
+        <input type='text' name='content'><br>
+        <input type='text' name='place'><br>
+        <input type='text' name='date'><br>
+        <input type='text' name='time_from'><br>
+        <input type='text' name='time_to'><br>
+        <input type='text' name='person'><br>
+        <input type='text' name='age'><br>
+        <input type='text' name='level'><br>
+        <input type='text' name='due'><br>
+        <input type='submit' value="작성">
+    </form>
+</body>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script>
+    $.each($('input[type=text]'), function (idx, item) {
+        $(this).attr('placeholder', $(this).attr('name'))
+    })
+</script>
+
+</html>

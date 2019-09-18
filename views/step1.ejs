@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+</head>
+
+<body>
+    <button type='button' onclick='isTeamFalse()'>신규등록</button>
+    <button type='button' onclick='isTeamTrue()'>팀검색</button><br>
+    <form action="step2" method="get">
+        <input type='hidden' name='isTeam' id='isTeam'>
+        <input type='text' id='target' name='team_name'><br> <label id='msgbox'></label><br>
+        <input type='submit' id='step2' value="다음" disabled>
+    </form>
+</body>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script>
+    var isTeam
+    var onNextStepBtn = false
+    function init(){
+        $('#target').val('')
+        $('#msgbox').text('')
+        onNextStepBtn = false
+        $('#isTeam').val(isTeam)
+    }
+    function isTeamFalse() {
+        isTeam = false
+        $('#target').attr('placeholder', '신규 팀 이름')
+        init()
+    }
+    function isTeamTrue() {
+        isTeam = true
+        $('#target').attr('placeholder', '기존 팀 검색')
+        init()
+    }
+    
+    $('#target').on('keyup', function (key) {
+
+        var input = $(this).val()
+        $.ajax({
+            url: '/isVaildTeam',
+            type: 'post',
+            data: { team_name: input },
+            dataType: 'json',
+            success: function (data) {
+                if (isTeam) {
+                    if (data.length > 0) {
+                        $('#msgbox').text('ok')
+                        $('#step2').attr('disabled',false)
+                    }
+                    else {
+                        $('#msgbox').text('존재하지 않는 팀 이름')
+                        $('#step2').attr('disabled',true)
+                    }
+                } else {
+                    if (data.length > 0) {
+                        $('#msgbox').text('이미 존재하는 이름')
+                        $('#step2').attr('disabled',true)
+                    }
+                    else {
+                        $('#msgbox').text('사용가능한 이름')
+                        $('#step2').attr('disabled',false)
+                    }
+                }
+            }
+        })
+
+    })
+
+</script>
+
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+</head>
+
+<body>
+    <button type="button" onclick='location.href="/matching_write"'>글쓰기</button>
+    <table border="1">
+        <tr>
+            <th>게시물번호</th>
+            <th>작성자</th>
+            <th>제목</th>
+            <th>장소</th>
+            <th colspan="3">날짜</th>
+            <th>시작시간</th>
+            <th>종료시간</th>
+            <th>인원수</th>
+            <th>연령대</th>
+            <th>수준</th>
+            <th>회비</th>
+        </tr>
+        <%for(var i = 0; i < list.length; i++){%>
+        <tr>
+            <td><%=list[i].no%></td>
+            <td><%=list[i].writer%></td>
+            <td><%=list[i].title%></td>
+            <td><%=list[i].place%></td>
+            <td><%=list[i].year%></td>
+            <td><%=list[i].month%></td>
+            <td><%=list[i].day%></td>
+            <td><%=list[i].time_from%></td>
+            <td><%=list[i].time_to%></td>
+            <td><%=list[i].person%></td>
+            <td><%=list[i].age%></td>
+            <td><%=list[i].level%></td>
+            <td><%=list[i].due%></td>
+
+        </tr>
+        <%}%>
+</table>
+</body>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script>
+    $.each($('tr'),function(idx,item){
+        if(idx === 0) return true
+        $(this).on('click',function(){
+            var board_no = $(this).children('td:first').text()
+            location.href = 'get?no=' + board_no
+        })
+    })
+</script>
+</html>
