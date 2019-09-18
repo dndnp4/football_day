@@ -29,6 +29,38 @@ router.post('/step2', function (req, res, next) {
   res.render('main')
 })
 
+
+router.get('/login',function(req,res,next){
+  res.render('login')
+})
+
+router.post('/login', function(req,res,next){
+  var a = req.body.id;
+  var b = req.body.pw;
+  
+  if(req.session.user){
+    console.log('이미 로그인됨', req.session.user)
+    res.render('main')
+  }else {
+    
+    db.requestLogin(a,b,function(err, result){
+      console.log(err)
+      if(!err){
+        console.log(a,b)
+        req.session.user = {
+          id : a,
+          pw : b
+        }
+        res.redirect('/main')
+      } else {
+        console.log(err)
+        res.redirect('/login')
+      }
+    })
+  }
+
+})
+
 //code for AJAX
 //팀이름 유효성검사
 router.post("/isVaildTeam", function (req, res, next) {

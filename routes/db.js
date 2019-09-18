@@ -432,6 +432,26 @@ exports.selectRandMember = (cb) => {
         }
     })
 }
+exports.requestLogin = (mid,mpw, cb) => {
+    const connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'mysql',
+        database: 'football_day'
+    })
+
+    connection.connect((err) => {
+        if (err) {
+            console.log(err)
+        } else {
+            const sql = 'select * from member where id = ? and pw = ?'
+            connection.query(sql, [mid,mpw], (err, rows) => {
+                cb(err, rows)
+            })
+            connection.end()
+        }
+    })
+}
 //유효성 검사
 exports.isVaildId = (tid, cb) => {
     const connection = mysql.createConnection({
@@ -452,7 +472,6 @@ exports.isVaildId = (tid, cb) => {
             connection.end()
         }
     })
-
 }
 exports.isVaildTeam = (tname, cb) => {
     const connection = mysql.createConnection({
