@@ -109,6 +109,7 @@ exports.selectAllMatching = (cb) => {
         }
     })
 }
+
 exports.selectGetMatching = (data, cb) => {
     const connection = mysql.createConnection({
         host: 'localhost',
@@ -129,6 +130,204 @@ exports.selectGetMatching = (data, cb) => {
         }
     })
 }
+
+exports.selectMatchingByTitle = (data, cb) => {
+    const connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'mysql',
+        database: 'football_day'
+    })
+    connection.connect((err) => {
+        if (err) {
+            console.log(err)
+        } else {
+            data = `%${data}%`
+            let sql = `select * from matching_board where title like ?`
+            connection.query(sql, [data], (err, result) => {
+                cb(err, result)
+                connection.end()
+            })
+        }
+    })
+}
+exports.selectMatchingByContent = (data, cb) => {
+    const connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'mysql',
+        database: 'football_day'
+    })
+    connection.connect((err) => {
+        if (err) {
+            console.log(err)
+        } else {
+            data = `%${data}%`
+            let sql = `select * from matching_board where content like ?`
+            connection.query(sql, [data], (err, result) => {
+                cb(err, result)
+                connection.end()
+            })
+        }
+    })
+}
+exports.selectMatchingByWriter = (data, cb) => {
+    const connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'mysql',
+        database: 'football_day'
+    })
+    connection.connect((err) => {
+        if (err) {
+            console.log(err)
+        } else {
+            data = `%${data}%`
+            let sql = `select * from matching_board where writer like ?`
+            connection.query(sql, [data], (err, result) => {
+                cb(err, result)
+                connection.end()
+            })
+        }
+    })
+}
+exports.selectMatchingByPlace = (data, cb) => {
+    const connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'mysql',
+        database: 'football_day'
+    })
+    connection.connect((err) => {
+        if (err) {
+            console.log(err)
+        } else {
+            data = `%${data}%`
+            let sql = `select * from matching_board where place like ?`
+            connection.query(sql, [data], (err, result) => {
+                cb(err, result)
+                connection.end()
+            })
+        }
+    })
+}
+exports.selectMatchingByYear = (data, cb) => {
+    const connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'mysql',
+        database: 'football_day'
+    })
+    connection.connect((err) => {
+        if (err) {
+            console.log(err)
+        } else {
+            data = `%${data}%`
+            let sql = `select * from matching_board where year like ?`
+            connection.query(sql, [data], (err, result) => {
+                cb(err, result)
+                connection.end()
+            })
+        }
+    })
+}
+exports.selectMatchingByMonth = (data, cb) => {
+    const connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'mysql',
+        database: 'football_day'
+    })
+    connection.connect((err) => {
+        if (err) {
+            console.log(err)
+        } else {
+            data = `%${data}%`
+            let sql = `select * from matching_board where month like ?`
+            connection.query(sql, [data], (err, result) => {
+                cb(err, result)
+                connection.end()
+            })
+        }
+    })
+}
+exports.selectMatchingByDay = (data, cb) => {
+    const connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'mysql',
+        database: 'football_day'
+    })
+    connection.connect((err) => {
+        if (err) {
+            console.log(err)
+        } else {
+            let sql = `select * from matching_board where day = ?`
+            connection.query(sql, [data], (err, result) => {
+                cb(err, result)
+                connection.end()
+            })
+        }
+    })
+}
+exports.selectMatchingByPerson = (data, cb) => {
+    const connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'mysql',
+        database: 'football_day'
+    })
+    connection.connect((err) => {
+        if (err) {
+            console.log(err)
+        } else {
+            let sql = `select * from matching_board where person = ?`
+            connection.query(sql, [data], (err, result) => {
+                cb(err, result)
+                connection.end()
+            })
+        }
+    })
+}
+exports.selectMatchingByAge = (data, cb) => {
+    const connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'mysql',
+        database: 'football_day'
+    })
+    connection.connect((err) => {
+        if (err) {
+            console.log(err)
+        } else {
+            let sql = `select * from matching_board where age = ?`
+            connection.query(sql, [data], (err, result) => {
+                cb(err, result)
+                connection.end()
+            })
+        }
+    })
+}
+exports.selectMatchingByLevel = (data, cb) => {
+    const connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'mysql',
+        database: 'football_day'
+    })
+    connection.connect((err) => {
+        if (err) {
+            console.log(err)
+        } else {
+            let sql = `select * from matching_board where level = ?`
+            connection.query(sql, [data], (err, result) => {
+                cb(err, result)
+                connection.end()
+            })
+        }
+    })
+}
+
 exports.updateMatching = (data) => {
     const connection = mysql.createConnection({
         host: 'localhost',
@@ -253,7 +452,7 @@ exports.isVaildTeam = (tname, cb) => {
 
 }
 
-exports.test = (cb) => {
+exports.test = (data, cb) => {
     const connection = mysql.createConnection({
         host: 'localhost',
         user: 'root',
@@ -265,8 +464,9 @@ exports.test = (cb) => {
         if (err) {
             console.log(err)
         } else {
-            const sql = 'select * from member'
-            connection.query(sql, (err, rows) => {
+            console.log(data.a, data.b)
+            const sql = 'select * from matching_board where month = ?'
+            connection.query(sql,[data.b], (err, rows) => {
                 cb(err, rows)
                 connection.end()
             })

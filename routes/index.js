@@ -25,7 +25,7 @@ router.get('/step2', function (req, res, next) {
 router.post('/step2', function (req, res, next) {
   var a = req.body.team_name
   var b = req.body.isTeam
-  
+
   db.insertMember(req.body, b)
   res.render('main')
 })
@@ -43,7 +43,57 @@ router.post('/matching_write', function (req, res, next) {
   db.insertMatching(req.body)
   res.redirect('/matching')
 })
+router.post('/search', function (req, res, next) {
+  var key = req.body.key
+  var value = req.body.value
 
+  switch (key) {
+    case 'writer':
+      db.selectMatchingByWriter(value, function (err, result) {
+        res.json(result)
+      })
+      break;
+
+    case 'title':
+      db.selectMatchingByTitle(value, function (err, result) {
+        res.json(result)
+      })
+      break;
+
+    case 'place':
+      db.selectMatchingByPlace(value, function (err, result) {
+        res.json(result)
+      })
+      break;
+
+    case 'date':
+      res.json(null)
+      break;
+
+    case 'time':
+      res.json(null)
+      break;
+
+    case 'person':
+      db.selectMatchingByPerson(value, function (err, result) {
+        res.json(result)
+      })
+      break;
+
+    case 'age':
+      db.selectMatchingByAge(value, function (err, result) {
+        res.json(result)
+      })
+      break;
+
+    case 'level':
+      db.selectMatchingByLevel(value, function (err, result) {
+        res.json(result)
+      })
+      break;
+  }
+
+})
 
 //board_one
 router.get('/get', function (req, res, next) {
@@ -52,18 +102,18 @@ router.get('/get', function (req, res, next) {
     res.render('get', { list: list })
   })
 })
-router.get('/modify',function(req,res,next){
+router.get('/modify', function (req, res, next) {
   var no = req.query.no
-  res.
-  db.selectGetMatching(no,function(err, result){
-    res.render('modify',{list:result})
+
+  db.selectGetMatching(no, function (err, result) {
+    res.render('modify', { list: result })
   })
 })
-router.post('/modify',function(req,res,next){  
+router.post('/modify', function (req, res, next) {
   db.updateMatching(req.body)
-  res.redirect('/get?no='+req.body.no)
+  res.redirect('/get?no=' + req.body.no)
 })
-router.get('/delete',function(req,res,next){
+router.get('/delete', function (req, res, next) {
   db.deleteMatching(req.query)
   res.redirect('/matching')
 })

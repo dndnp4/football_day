@@ -3,12 +3,32 @@ var router = express.Router();
 var db = require('./db')
 
 router.get('/',function(req,res,next){
-    db.selectGetMatching(1,function(err, result){
-        //month는 getMonth값의 +1 해야 그 날짜 나옴
-        var a = new Date(result[0].date)
-        console.log(a.getHours())
-    })
     
+    // db.selectMatchingByTitle('1344',function(err, res){
+    //     console.log(err,res)
+    // })
+    
+    // db.selectGetMatching(1,function(err, result){
+    //     //month는 getMonth값의 +1 해야 그 날짜 나옴
+    //     var a = new Date(result[0].date)
+    //     console.log(a.getHours())
+        
+    // })
+})
+router.post('/',function(req,res,next){
+    db.selectMatchingByTitle(req.body.test, function(err, result){
+        res.send(result)
+    })
+    // db.selectMatchingByTitle('1344',function(err, res){
+    //     console.log(err,res)
+    // })
+    
+    // db.selectGetMatching(1,function(err, result){
+    //     //month는 getMonth값의 +1 해야 그 날짜 나옴
+    //     var a = new Date(result[0].date)
+    //     console.log(a.getHours())
+        
+    // })
 })
 router.get('/board', function (req, res, next) {
     var chars = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']

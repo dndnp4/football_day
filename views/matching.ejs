@@ -6,47 +6,115 @@
 
 <body>
     <button type="button" onclick='location.href="/matching_write"'>글쓰기</button>
-    <table border="1">
-        <tr>
-            <th>게시물번호</th>
-            <th>작성자</th>
-            <th>제목</th>
-            <th>장소</th>
-            <th colspan="3">날짜</th>
-            <th>시작시간</th>
-            <th>종료시간</th>
-            <th>인원수</th>
-            <th>연령대</th>
-            <th>수준</th>
-            <th>회비</th>
-        </tr>
-        <%for(var i = 0; i < list.length; i++){%>
-        <tr>
-            <td><%=list[i].no%></td>
-            <td><%=list[i].writer%></td>
-            <td><%=list[i].title%></td>
-            <td><%=list[i].place%></td>
-            <td><%=list[i].year%></td>
-            <td><%=list[i].month%></td>
-            <td><%=list[i].day%></td>
-            <td><%=list[i].time_from%></td>
-            <td><%=list[i].time_to%></td>
-            <td><%=list[i].person%></td>
-            <td><%=list[i].age%></td>
-            <td><%=list[i].level%></td>
-            <td><%=list[i].due%></td>
-
-        </tr>
-        <%}%>
+    <select id='search_key' name='key'>
+        <option>선택</option>
+        <option value='writer'>작성자</option>
+        <option value='title'>제목</option>
+        <option value='place'>장소</option>
+        <option value='date'>날짜</option>
+        <option value='time'>시간</option>
+        <option value='person'>인원수</option>
+        <option value='age'>나이</option>
+        <option value='level'>실력</option>
+    </select>
+    <input type='text' id='search_word'>
+    <input type='text' id='search_word2' style="display: none">
+    <div id='tableArea'>
+        <table border="1">
+            <tr>
+                <th>게시물번호</th>
+                <th>작성자</th>
+                <th>제목</th>
+                <th>장소</th>
+                <th colspan="3">날짜</th>
+                <th>시작시간</th>
+                <th>종료시간</th>
+                <th>인원수</th>
+                <th>연령대</th>
+                <th>수준</th>
+                <th>회비</th>
+            </tr>
+            <%for(var i = 0; i < list.length; i++){%>
+            <tr>
+                <td><%=list[i].no%></td>
+                <td><%=list[i].writer%></td>
+                <td><%=list[i].title%></td>
+                <td><%=list[i].place%></td>
+                <td><%=list[i].year%></td>
+                <td><%=list[i].month%></td>
+                <td><%=list[i].day%></td>
+                <td><%=list[i].time_from%></td>
+                <td><%=list[i].time_to%></td>
+                <td><%=list[i].person%></td>
+                <td><%=list[i].age%></td>
+                <td><%=list[i].level%></td>
+                <td><%=list[i].due%></td>
+            </tr>
+            <%}%>
 </table>
+</div>
 </body>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script>
-    $.each($('tr'),function(idx,item){
-        if(idx === 0) return true
-        $(this).on('click',function(){
+    $('#search_key').change(function () {
+        var var1 = $(this).val()
+
+        if (var1 === 'time') {
+            $('#search_word2').show()
+        } else {
+            $('#search_word2').css('display', 'none')
+        }
+    })
+    $.each($('tr'), function (idx, item) {
+        if (idx === 0) return true
+        $(this).on('click', function () {
             var board_no = $(this).children('td:first').text()
             location.href = 'get?no=' + board_no
+        })
+    })
+    $('#search_word').on('keyup', function () {
+        var var1 = $('#search_word').val()
+        var var2 = $('#search_key').val()
+        $.ajax({
+            url: '/search',
+            type: 'post',
+            data: { key:var2,value:var1 },
+            dataType: 'json',
+            success: function (result) {
+                var html = ''
+                $('#tableArea').children().remove()
+                html += '<table border="1">'
+                html += `<tr>
+                <th>게시물번호</th>
+                <th>작성자</th>
+                <th>제목</th>
+                <th>장소</th>
+                <th colspan="3">날짜</th>
+                <th>시작시간</th>
+                <th>종료시간</th>
+                <th>인원수</th>
+                <th>연령대</th>
+                <th>수준</th>
+                <th>회비</th>
+            </tr>`
+                $.each(result, function(idx,item){
+                    html += `<tr><td>${item.no}</td>`
+                    html += `<td>${item.writer}</td>`
+                    html += `<td>${item.title}</td>`
+                    html += `<td>${item.place}</td>`
+                    html += `<td>${item.year}</td>`
+                    html += `<td>${item.month}</td>`
+                    html += `<td>${item.day}</td>`
+                    html += `<td>${item.time_from}</td>`
+                    html += `<td>${item.time_to}</td>`
+                    html += `<td>${item.person}</td>`
+                    html += `<td>${item.age}</td>`
+                    html += `<td>${item.level}</td>`
+                    html += `<td>${item.due}</td></tr>`
+                })
+                html += '</table>'
+                $('#tableArea').append(html)
+            }
         })
     })
 </script>
