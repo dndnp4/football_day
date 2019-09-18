@@ -17,8 +17,9 @@
         <option value='age'>나이</option>
         <option value='level'>실력</option>
     </select>
-    <input type='text' id='search_word'>
-    <input type='text' id='search_word2' style="display: none">
+    <input type='text' id='search_word' placeholder="search_word">
+    <input type='text' id='search_word2' placeholder='search_word2' style="display: none">
+    <input type='text' id='search_word3' placeholder='search_word3' style="display: none">
     <div id='tableArea'>
         <table border="1">
             <tr>
@@ -56,29 +57,40 @@
 </body>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script>
+    
+    
+    function onClickEventForTable() {
+        $.each($('tr'), function (idx, item) {
+            if (idx === 0) return true
+            $(this).on('click', function () {
+                var board_no = $(this).children('td:first').text()
+                location.href = 'get?no=' + board_no
+            })
+        })
+    }
     $('#search_key').change(function () {
         var var1 = $(this).val()
 
         if (var1 === 'time') {
             $('#search_word2').show()
+            $('#search_word3').hide()
+        } else if(var1 === 'date') {
+            $('#search_word2').show()
+            $('#search_word3').show()
         } else {
-            $('#search_word2').css('display', 'none')
+            $('#search_word2').hide()
+            $('#search_word3').hide()
         }
     })
-    $.each($('tr'), function (idx, item) {
-        if (idx === 0) return true
-        $(this).on('click', function () {
-            var board_no = $(this).children('td:first').text()
-            location.href = 'get?no=' + board_no
-        })
-    })
-    $('#search_word').on('keyup', function () {
+    $('input[type=text]').on('keyup', function () {
         var var1 = $('#search_word').val()
         var var2 = $('#search_key').val()
+        var var3 = $('#search_word2').val()
+        var var4 = $('#search_word3').val()
         $.ajax({
             url: '/search',
             type: 'post',
-            data: { key:var2,value:var1 },
+            data: { key: var2, value: var1, value2:var3, value3:var4},
             dataType: 'json',
             success: function (result) {
                 var html = ''
@@ -97,7 +109,7 @@
                 <th>수준</th>
                 <th>회비</th>
             </tr>`
-                $.each(result, function(idx,item){
+                $.each(result, function (idx, item) {
                     html += `<tr><td>${item.no}</td>`
                     html += `<td>${item.writer}</td>`
                     html += `<td>${item.title}</td>`
@@ -114,8 +126,10 @@
                 })
                 html += '</table>'
                 $('#tableArea').append(html)
+                onClickEventForTable()
             }
         })
     })
+    onClickEventForTable()
 </script>
 </html>

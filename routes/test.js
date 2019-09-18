@@ -3,7 +3,27 @@ var router = express.Router();
 var db = require('./db')
 
 router.get('/',function(req,res,next){
-    
+    let condition = ``
+    let sql = `select * from matching_board where `
+    a = -1
+    b = -1
+    c = -1
+    if(a>0) {
+        condition += `year=? `
+    }
+    if(b>0) {
+        condition += `month=? `
+    }
+    if(c>0) {
+        condition += `day=? `
+    }
+    condition = condition.split(' ')
+    for(var i = 0 ; i < condition.length ; i++){
+        sql += condition[i]
+        if(i == condition.length - 2) break;
+        sql += ' and '
+    }
+    console.log(sql)
     // db.selectMatchingByTitle('1344',function(err, res){
     //     console.log(err,res)
     // })

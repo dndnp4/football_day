@@ -12,15 +12,15 @@ exports.insertMember = (data, team) => {
         if (err) {
             console.log(err)
         } else {
-            
+
             if (team === 'true') {
                 this.updateTeamMember(data.team_name)
-            }else {
+            } else {
                 this.insertTeam(data.team_name)
             }
             let sql = `insert into member(team_name,id,pw,name,account,wallet) values(?,?,?,?,?,?)`
-                connection.query(sql, [data.team_name, data.id, data.pw, data.name, data.account, data.wallet], (err, result) => {
-                    connection.end()
+            connection.query(sql, [data.team_name, data.id, data.pw, data.name, data.account, data.wallet], (err, result) => {
+                connection.end()
             })
         }
     })
@@ -61,7 +61,7 @@ exports.insertMatching = (data) => {
         } else {
             let sql = `insert into matching_board (title,content,writer,place,year,month,day,time_from,time_to,person,age,level,due)
                      values (?,?,?,?,?,?,?,?,?,?,?,?,?)`
-            connection.query(sql, [data.title, data.content, data.writer, data.place,data.year,data.month,data.day, data.time_from, data.time_to, data.person, data.age, data.level, data.due], (err, result) => {
+            connection.query(sql, [data.title, data.content, data.writer, data.place, data.year, data.month, data.day, data.time_from, data.time_to, data.person, data.age, data.level, data.due], (err, result) => {
                 connection.end()
             })
         }
@@ -101,7 +101,7 @@ exports.selectAllMatching = (cb) => {
             console.log(err)
         } else {
             let sql = `select * from matching_board`
-            
+
             connection.query(sql, (err, result) => {
                 cb(err, result)
                 connection.end()
@@ -211,7 +211,7 @@ exports.selectMatchingByPlace = (data, cb) => {
         }
     })
 }
-exports.selectMatchingByYear = (data, cb) => {
+exports.selectMatchingByDate = (a, b, c, cb) => {
     const connection = mysql.createConnection({
         host: 'localhost',
         user: 'root',
@@ -222,16 +222,40 @@ exports.selectMatchingByYear = (data, cb) => {
         if (err) {
             console.log(err)
         } else {
-            data = `%${data}%`
-            let sql = `select * from matching_board where year like ?`
-            connection.query(sql, [data], (err, result) => {
+            a = parseInt(a)
+            b = parseInt(b)
+            c = parseInt(c)
+            let sql = `select * from matching_board where `
+            let condition = ``
+            let data = []
+            if (a > 0) {
+                condition += `year=? `
+                data.push(a)
+            }
+            if (b > 0) {
+                condition += `month=? `
+                data.push(b)
+            }
+            if (c > 0) {
+                condition += `day=? `
+                data.push(c)
+            }
+            condition = condition.split(' ')
+            console.log(data)
+            for (var i = 0; i < condition.length; i++) {
+                sql += condition[i]
+                if (i == condition.length - 2) break;
+                sql += ' and '
+            }
+
+            connection.query(sql, data, (err, result) => {
                 cb(err, result)
                 connection.end()
             })
         }
     })
 }
-exports.selectMatchingByMonth = (data, cb) => {
+exports.selectMatchingByTime = (a, b, cb) => {
     const connection = mysql.createConnection({
         host: 'localhost',
         user: 'root',
@@ -242,34 +266,35 @@ exports.selectMatchingByMonth = (data, cb) => {
         if (err) {
             console.log(err)
         } else {
-            data = `%${data}%`
-            let sql = `select * from matching_board where month like ?`
-            connection.query(sql, [data], (err, result) => {
+            a = parseInt(a)
+            b = parseInt(b)
+            let sql = `select * from matching_board where `
+            let condition = ``
+            let data = []
+            if (a > 0) {
+                condition += `time_from>=? `
+                data.push(a)
+            }
+            if (b > 0) {
+                condition += `time_to<=? `
+                data.push(b)
+            }
+
+            condition = condition.split(' ')
+            console.log(data)
+            for (var i = 0; i < condition.length; i++) {
+                sql += condition[i]
+                if (i == condition.length - 2) break;
+                sql += ' and '
+            }
+            connection.query(sql,data, (err, result) => {
                 cb(err, result)
                 connection.end()
             })
         }
     })
 }
-exports.selectMatchingByDay = (data, cb) => {
-    const connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: 'mysql',
-        database: 'football_day'
-    })
-    connection.connect((err) => {
-        if (err) {
-            console.log(err)
-        } else {
-            let sql = `select * from matching_board where day = ?`
-            connection.query(sql, [data], (err, result) => {
-                cb(err, result)
-                connection.end()
-            })
-        }
-    })
-}
+
 exports.selectMatchingByPerson = (data, cb) => {
     const connection = mysql.createConnection({
         host: 'localhost',
@@ -361,7 +386,6 @@ exports.deleteMatching = (data) => {
         } else {
             let sql = `delete from matching_board where no = ?`
             connection.query(sql, [data.no], (err, result) => {
-                console.log(err, result)
                 connection.end()
             })
         }
@@ -466,7 +490,7 @@ exports.test = (data, cb) => {
         } else {
             console.log(data.a, data.b)
             const sql = 'select * from matching_board where month = ?'
-            connection.query(sql,[data.b], (err, rows) => {
+            connection.query(sql, [data.b], (err, rows) => {
                 cb(err, rows)
                 connection.end()
             })

@@ -46,7 +46,8 @@ router.post('/matching_write', function (req, res, next) {
 router.post('/search', function (req, res, next) {
   var key = req.body.key
   var value = req.body.value
-
+  var value2 = req.body.value2
+  var value3 = req.body.value3
   switch (key) {
     case 'writer':
       db.selectMatchingByWriter(value, function (err, result) {
@@ -67,11 +68,16 @@ router.post('/search', function (req, res, next) {
       break;
 
     case 'date':
-      res.json(null)
+      db.selectMatchingByDate(value, value2, value3, function(err, result){
+        res.json(result)
+      })
       break;
 
     case 'time':
-      res.json(null)
+      
+      db.selectMatchingByTime(value, value2, function(err, result){
+        res.json(result)
+      })
       break;
 
     case 'person':
