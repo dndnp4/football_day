@@ -70,6 +70,7 @@
 </body>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script>
+    //url로 넘어온 파라미터에서 value추출
     function getParameterByName(name) {
         name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
         var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
@@ -77,16 +78,16 @@
         return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
     }
     $('#matching').on('click', function () {
-        
-        location.href = 'matching'
+
+        location.href = '/matching/'
     })
     $('#modify').on('click', function () {
         var no = getParameterByName('no')
-        location.href = 'modify?no=' + no
+        location.href = '/matching/modify?no=' + no
     })
     $('#delete').on('click', function () {
         var no = getParameterByName('no')
-        location.href = 'delete?no=' + no
+        location.href = '/matching/delete?no=' + no
     })
 </script>
 </html>

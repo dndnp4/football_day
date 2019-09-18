@@ -159,7 +159,6 @@ router.get('/user', function (req, res, next) {
             db.insertMember(data,'true')
 
         })
-
     }
     res.render('clone')
 })

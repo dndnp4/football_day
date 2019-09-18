@@ -5,7 +5,7 @@
 </head>
 
 <body>
-    <button type="button" onclick='location.href="/matching_write"'>글쓰기</button>
+    <button type="button" onclick='location.href="/write"'>글쓰기</button>
     <select id='search_key' name='key'>
         <option>선택</option>
         <option value='writer'>작성자</option>
@@ -57,14 +57,14 @@
 </body>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script>
-    
-    
+
+
     function onClickEventForTable() {
         $.each($('tr'), function (idx, item) {
             if (idx === 0) return true
             $(this).on('click', function () {
                 var board_no = $(this).children('td:first').text()
-                location.href = 'get?no=' + board_no
+                location.href = '/matching/get?no=' + board_no
             })
         })
     }
@@ -74,7 +74,7 @@
         if (var1 === 'time') {
             $('#search_word2').show()
             $('#search_word3').hide()
-        } else if(var1 === 'date') {
+        } else if (var1 === 'date') {
             $('#search_word2').show()
             $('#search_word3').show()
         } else {
@@ -88,9 +88,9 @@
         var var3 = $('#search_word2').val()
         var var4 = $('#search_word3').val()
         $.ajax({
-            url: '/search',
+            url: '/matching/search',
             type: 'post',
-            data: { key: var2, value: var1, value2:var3, value3:var4},
+            data: { key: var2, value: var1, value2: var3, value3: var4 },
             dataType: 'json',
             success: function (result) {
                 var html = ''
