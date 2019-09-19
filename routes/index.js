@@ -15,7 +15,9 @@ function execption_url(url) {
 }
 
 router.all('*', function (req, res, next) {
+  console.log('user session : ',req.session.user)
   if(!req.session.user && !execption_url(req.url)){
+    console.log('No session')
     res.redirect('/login')
   }else {
     next()
@@ -60,7 +62,7 @@ router.post('/reconfirm', function (req, res, next) {
       if (!result[0]) {
         res.render('message', { msg: "incorrect your data", url: '/reconfirm' })
       } else {
-        res.render('mypage', { list: result[0] })
+        res.redirect('/mypage')
       }
     })
   } else {
@@ -68,20 +70,27 @@ router.post('/reconfirm', function (req, res, next) {
   }
 })
 router.get('/mypage', function (req, res, next) {
-  if (req.session.user) res.render('mypage')
-  else res.render('login')
+  db.isVaildId(req.session.user.id, function(err, result){
+    res.render('mypage',{list:result[0]})
+  })
+  
 })
+
 router.post('/mypage', function (req, res, next) {
   var id = req.body.id
   var pw = req.body.pw
   var account = req.body.account
-
-  db.updateMember({id:id, pw:pw, account:account})
+  var data = {
+    id : id,
+    pw : pw,
+    account : account
+  }
+  console.log(req.body)
+  db.updateMember(data)
   res.redirect('/reconfirm')
 })
 
 router.get('/login', function (req, res, next) {
-
   if (req.session.user) {
     res.render('message', { msg: "already exist your Session", url: '/main' })
   }
