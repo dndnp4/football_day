@@ -89,11 +89,11 @@ router.get('/delete', function (req, res, next) {
     res.redirect('/matching')
 })
 router.get('/write', function (req, res, next) {
-    res.render('write')
+    res.render('matching/write')
 })
 router.post('/write', function (req, res, next) {
     db.insertMatching(req.body)
-    res.redirect('/')
+    res.redirect('/matching')
 })
 
 //code for AJAX

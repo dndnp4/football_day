@@ -367,7 +367,6 @@ exports.updateMatching = (data) => {
             let sql = `update matching_board set title = ?,content = ?, place = ?, year = ?, month = ?, day = ?, time_from = ?, time_to = ?, person = ?, age = ?, level = ?, due = ? where no = ?`
 
             connection.query(sql, [data.title, data.content, data.place, data.year, data.month, data.day, data.time_from, data.time_to, data.person, data.age, data.level, data.due, data.no], (err, result) => {
-                console.log(err, result)
                 connection.end()
             })
         }
@@ -391,6 +390,27 @@ exports.deleteMatching = (data) => {
         }
     })
 }
+
+exports.updateMember = (data) => {
+    const connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'mysql',
+        database: 'football_day'
+    })
+    connection.connect((err) => {
+        if (err) {
+            console.log(err)
+        } else {
+            let sql = `update member set pw = ?, account = ? where id = ?`
+
+            connection.query(sql, [data.pw, data.account, data.id], (err, result) => {
+                connection.end()
+            })
+        }
+    })
+}
+
 //테스트용 케이스 생성
 exports.selectRandTeam = (cb) => {
     const connection = mysql.createConnection({

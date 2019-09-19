@@ -2,6 +2,25 @@ var express = require('express');
 var router = express.Router();
 var db = require('./db')
 
+
+//all에 걸리지않는 페이지 리스트 존재하면 참 아니면 거짓
+function execption_url(url) {
+  var list = new Map()
+  list.set('/step1',true)
+  list.set('/step2',true)
+  list.set('/login',true)
+  
+  if(list.get(url)) return true
+  else return false
+}
+
+router.all('*', function (req, res, next) {
+  if(!req.session.user && !execption_url(req.url)){
+    res.redirect('/login')
+  }else {
+    next()
+  }
+})
 /* GET home page. */
 router.get('/main', function (req, res, next) {
   res.render('main')
@@ -9,7 +28,8 @@ router.get('/main', function (req, res, next) {
 
 //step1
 router.get('/step1', function (req, res, next) {
-  res.render('signup/step1')
+  if(req.session.user) res.redirect('/main')  //세션이 있는데 굳이 가입페이지에 들어갈 필요없다
+  else res.render('signup/step1')
 })
 router.post('/step1', function (req, res, next) {
   res.render('signup/step1')
@@ -28,39 +48,71 @@ router.post('/step2', function (req, res, next) {
   db.insertMember(req.body, b)
   res.render('main')
 })
-
-
-router.get('/login',function(req,res,next){
-  res.render('login')
+router.get('/reconfirm', function (req, res, next) {
+  res.render('reconfirm', { uid: req.session.user.id })
 })
+router.post('/reconfirm', function (req, res, next) {
+  var uid = req.body.id
+  var upw = req.body.pw
 
-router.post('/login', function(req,res,next){
-  var a = req.body.id;
-  var b = req.body.pw;
-  
-  if(req.session.user){
-    console.log('이미 로그인됨', req.session.user)
-    res.render('main')
-  }else {
-    
-    db.requestLogin(a,b,function(err, result){
-      console.log(err)
-      if(!err){
-        console.log(a,b)
-        req.session.user = {
-          id : a,
-          pw : b
-        }
-        res.redirect('/main')
+  if (req.session.user.id == uid) {
+    db.requestLogin(uid, upw, function (err, result) {
+      if (!result[0]) {
+        res.render('message', { msg: "incorrect your data", url: '/reconfirm' })
       } else {
-        console.log(err)
-        res.redirect('/login')
+        res.render('mypage', { list: result[0] })
       }
     })
+  } else {
+    res.redirect('/login')
   }
+})
+router.get('/mypage', function (req, res, next) {
+  if (req.session.user) res.render('mypage')
+  else res.render('login')
+})
+router.post('/mypage', function (req, res, next) {
+  var id = req.body.id
+  var pw = req.body.pw
+  var account = req.body.account
 
+  db.updateMember({id:id, pw:pw, account:account})
+  res.redirect('/reconfirm')
 })
 
+router.get('/login', function (req, res, next) {
+
+  if (req.session.user) {
+    res.render('message', { msg: "already exist your Session", url: '/main' })
+  }
+  else res.render('login')
+})
+
+router.post('/login', function (req, res, next) {
+  var a = req.body.id;
+  var b = req.body.pw;
+
+  db.requestLogin(a, b, function (err, result) {
+
+    if (!result[0]) {
+      res.render('message', { msg: "로그인정보 확인", url: '/login' })
+    } else {
+      req.session.user = {
+        id: a,
+        name: result[0].name,
+        team_name: result[0].team_name
+      }
+
+      res.redirect('/main')
+    }
+  })
+
+})
+router.get('/logout', function (req, res, next) {
+  req.session.destroy(function (err) {
+    res.redirect('/login')
+  })
+})
 //code for AJAX
 //팀이름 유효성검사
 router.post("/isVaildTeam", function (req, res, next) {
