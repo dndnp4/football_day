@@ -9,7 +9,7 @@ function execption_url(url) {
   list.set('/step1',true)
   list.set('/step2',true)
   list.set('/login',true)
-  
+  list.set('/test',true)
   if(list.get(url)) return true
   else return false
 }

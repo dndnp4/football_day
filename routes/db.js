@@ -516,7 +516,7 @@ exports.isVaildTeam = (tname, cb) => {
 
 }
 
-exports.test = (data, cb) => {
+exports.test = (sql, cb) => {
     const connection = mysql.createConnection({
         host: 'localhost',
         user: 'root',
@@ -528,10 +528,28 @@ exports.test = (data, cb) => {
         if (err) {
             console.log(err)
         } else {
-            console.log(data.a, data.b)
-            const sql = 'select * from matching_board where month = ?'
-            connection.query(sql, [data.b], (err, rows) => {
+            connection.query(sql, [], (err, rows) => {
                 cb(err, rows)
+                connection.end()
+            })
+        }
+    })
+}
+exports.isVaildtTable = (tname, cb) => {
+    const connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'mysql',
+        database: 'football_day'
+    })
+
+    connection.connect((err) => {
+        if (err) {
+            console.log(err)
+        } else {
+            const sql = 'SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = "football_day" AND TABLE_NAME = ?'
+            connection.query(sql, [tname], (err,rows) => {
+                cb(rows,err)
                 connection.end()
             })
         }
