@@ -17,7 +17,6 @@ function execption_url(url) {
 router.all('*', function (req, res, next) {
   console.log('user session : ',req.session.user)
   if(!req.session.user && !execption_url(req.url)){
-    console.log('No session')
     res.redirect('/login')
   }else {
     next()
@@ -85,7 +84,6 @@ router.post('/mypage', function (req, res, next) {
     pw : pw,
     account : account
   }
-  console.log(req.body)
   db.updateMember(data)
   res.redirect('/reconfirm')
 })

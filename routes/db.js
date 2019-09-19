@@ -403,7 +403,7 @@ exports.updateMember = (data) => {
             console.log(err)
         } else {
             let sql = `update member set pw = ?, account = ? where id = ?`
-            console.log(data)
+            
             connection.query(sql, [data.pw, data.account, data.id], (err, result) => {
                 
                 connection.end()
