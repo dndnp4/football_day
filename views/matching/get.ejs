@@ -24,8 +24,11 @@
             <td>내용</td>
             <td><%=list[i].content%></td>
         <tr>
-            <td>장소</td>
-            <td><%=list[i].place%></td>
+            <td rowspan="2">장소</td>
+            <td><%=list[i].area%></td>
+        </tr>
+        <tr>
+            <td><%=list[i].stadium%></td>
         </tr>
         <tr>
             <td rowspan="3">날짜</td>
@@ -77,17 +80,27 @@
             results = regex.exec(location.search);
         return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
     }
+    $(document).ready(function(){
+        var writer = "<%=list[0].writer%>"
+        var reader = "<%=user.id%>"
+        if(writer != reader) {
+            $('#modify').hide()
+            $('#delete').hide()
+        }
+    })
     $('#matching').on('click', function () {
-
         location.href = '/matching/'
     })
     $('#modify').on('click', function () {
+        
         var no = getParameterByName('no')
         location.href = '/matching/modify?no=' + no
     })
     $('#delete').on('click', function () {
         var no = getParameterByName('no')
-        location.href = '/matching/delete?no=' + no
+        var a = confirm('삭제???')
+        if(a) location.href = '/matching/delete?no=' + no
+        else return false
     })
 </script>
 </html>

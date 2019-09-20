@@ -2,6 +2,16 @@ var express = require('express');
 var router = express.Router();
 var db = require('./db')
 
+function randomUser() {
+    let a
+    db.selectRandMember(function (err, result) {
+
+        a = result[0]
+    })
+    console.log(a)
+    return a
+}
+
 function makingSQL(DML, table, data) {
     let sql = ''
     sql += DML + ' '
@@ -14,40 +24,40 @@ function makingSQL(DML, table, data) {
 
     switch (DML) {
         case 'select':
-            if(data){
-                if(data.column){
-                    for(var i = 0 ; i < data.column.length; i++){
+            if (data) {
+                if (data.column) {
+                    for (var i = 0; i < data.column.length; i++) {
                         sql += data.column[i]
-                        if(data.column[i+1]) sql+=', '
+                        if (data.column[i + 1]) sql += ', '
                     }
                 }
                 sql += ' FROM ' + table
-                
-                if(data.condition){
+
+                if (data.condition) {
                     sql += " WHERE "
-                    for(var i = 0 ; i < data.condition.length; i++){
+                    for (var i = 0; i < data.condition.length; i++) {
                         sql += data.condition[i].variable + ' ' + data.condition[i].sign + " '" + data.condition[i].value + "'"
-                        if(data.condition[i+1]) sql+=' AND '
+                        if (data.condition[i + 1]) sql += ' AND '
                     }
                 }
             }
             break;
         case 'insert':
             sql += 'INTO ' + table
-            if(data){
-                if(data.column) {
+            if (data) {
+                if (data.column) {
                     sql += " ("
-                    for(var i = 0 ; i < data.column.length; i++){
+                    for (var i = 0; i < data.column.length; i++) {
                         sql += data.column[i]
-                        if(data.column[i+1]) sql+=', ' 
+                        if (data.column[i + 1]) sql += ', '
                     }
                     sql += ") "
                 }
-                if(data.value){
+                if (data.value) {
                     sql += 'VALUES ('
-                    for(var i = 0; i < data.value.length; i++){
+                    for (var i = 0; i < data.value.length; i++) {
                         sql += `'${data.value[i]}'`
-                        if(data.value[i+1]) sql+=', '
+                        if (data.value[i + 1]) sql += ', '
                     }
                     sql += ")"
                 }
@@ -55,19 +65,19 @@ function makingSQL(DML, table, data) {
             break;
         case 'update':
             sql += table + ' SET '
-            if(data){
-                if(data.column && data.value) {
-                    for(var i = 0; i < data.column.length; i++){
+            if (data) {
+                if (data.column && data.value) {
+                    for (var i = 0; i < data.column.length; i++) {
                         sql += data.column[i] + ' = ' + data.value[i]
-                        if(data.column[i+1]) sql += ', '
+                        if (data.column[i + 1]) sql += ', '
                     }
                 }
 
-                if(data.condition){
+                if (data.condition) {
                     sql += ' WHERE '
-                    for(var i = 0; i < data.condition.length; i++){
+                    for (var i = 0; i < data.condition.length; i++) {
                         sql += data.condition[i].variable + ' ' + data.condition[i].sign + " '" + data.condition[i].value + "'"
-                        if(data.condition[i+1]) sql+=' AND '
+                        if (data.condition[i + 1]) sql += ' AND '
                     }
                 }
             }
@@ -108,34 +118,34 @@ router.get('/', function (req, res, next) {
         value: 1,
     }
     var up = {
-        column : ['title','content'],
-        value : ['test1','test_content'],
-        condition : [
+        column: ['title', 'content'],
+        value: ['test1', 'test_content'],
+        condition: [
             {
-                variable : 'month',
-                sign : '=',
-                value : '5'
+                variable: 'month',
+                sign: '=',
+                value: '5'
             }
         ]
     }
     var ins = {
-        column : ['team_name','grade'],
-        value : ['TTEASDAM','30']
+        column: ['team_name', 'grade'],
+        value: ['TTEASDAM', '30']
     }
     var sel = {
-        column : ['month'],
-        condition : [
+        column: ['month'],
+        condition: [
             {
-                variable:'month',
-                sign:'>=',
-                value:'5'
+                variable: 'month',
+                sign: '>=',
+                value: '5'
             }
         ]
     }
     var sql = makingSQL('select', 'matching_board', sel)
-    db.test(sql,function(err, result){
-        console.log(result)
-    })
+    // db.test(sql, function (err, result) {
+    //     console.log(result)
+    // })
 
     // db.selectMatchingByTitle('1344',function(err, res){
     //     console.log(err,res)
@@ -166,55 +176,60 @@ router.post('/', function (req, res, next) {
 router.get('/board', function (req, res, next) {
     var chars = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
     for (var a = 0; a < 10; a++) {
-        var data = {}
-        var result = ''
-        for (let i = 0; i < 10; i++) {
-            result += chars[Math.floor(Math.random() * chars.length)]
-        }
-        data.title = result
+        db.selectRandPlace(function (err, res) {
+            db.selectRandMember(function (err, res2) {
+                var data = {}
+                var result = ''
+                for (let i = 0; i < 10; i++) {
+                    result += chars[Math.floor(Math.random() * chars.length)]
+                }
+                data.title = result
 
-        result = ''
-        for (let i = 0; i < 100; i++) {
-            result += chars[Math.floor(Math.random() * chars.length)]
-        }
-        data.content = result
-        data.writer = 'dndnp4'
+                result = ''
+                for (let i = 0; i < 100; i++) {
+                    result += chars[Math.floor(Math.random() * chars.length)]
+                }
+                data.content = result
+                data.writer = 'admin'//res2[0].id
 
-        result = ''
-        for (let i = 0; i < 15; i++) {
-            result += chars[Math.floor(Math.random() * chars.length)]
-        }
-        data.place = result
+                result = ''
+                for (let i = 0; i < 15; i++) {
+                    result += chars[Math.floor(Math.random() * chars.length)]
+                }
 
-        result = 2019
-        data.year = result
+                data.area = res[0].area
+                data.stadium = res[0].name
 
-        result = Math.floor(Math.random() * 12) + 1
-        data.month = result
+                result = 2019
+                data.year = result
 
-        result = Math.floor(Math.random() * 30) + 1
-        data.day = result
+                result = Math.floor(Math.random() * 12) + 1
+                data.month = result
 
-        result = Math.floor(Math.random() * 20) + 1
-        data.time_from = result
+                result = Math.floor(Math.random() * 30) + 1
+                data.day = result
 
-        result = Math.floor(Math.random() * 20) + 1
-        data.time_to = result
+                result = Math.floor(Math.random() * 20) + 1
+                data.time_from = result
 
-        result = Math.floor(Math.random() * 12) + 1
-        data.person = result
+                result = Math.floor(Math.random() * 20) + 1
+                data.time_to = result
 
-        result = Math.floor(Math.random() * 12) + 1
-        data.age = result
+                result = Math.floor(Math.random() * 12) + 1
+                data.person = result
 
-        result = Math.floor(Math.random() * 100) + 1
-        data.level = result
+                result = Math.floor(Math.random() * 12) + 1
+                data.age = result
 
-        result = Math.floor(Math.random() * 100) + 1
-        data.due = result
+                result = Math.floor(Math.random() * 100) + 1
+                data.level = result
 
-        db.insertMatching(data)
-        //db.insertTeam(result)
+                result = Math.floor(Math.random() * 100) + 1
+                data.due = result
+
+                db.insertMatching(data)
+            })
+        })
     }
     res.render('clone')
 })

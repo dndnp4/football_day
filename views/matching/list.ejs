@@ -10,7 +10,8 @@
         <option>선택</option>
         <option value='writer'>작성자</option>
         <option value='title'>제목</option>
-        <option value='place'>장소</option>
+        <option value='area'>지역</option>
+        <option value='stadium'>경기장</option>
         <option value='date'>날짜</option>
         <option value='time'>시간</option>
         <option value='person'>인원수</option>
@@ -26,7 +27,7 @@
                 <th>게시물번호</th>
                 <th>작성자</th>
                 <th>제목</th>
-                <th>장소</th>
+                <th colspan="2">장소</th>
                 <th colspan="3">날짜</th>
                 <th>시작시간</th>
                 <th>종료시간</th>
@@ -40,7 +41,8 @@
                 <td><%=list[i].no%></td>
                 <td><%=list[i].writer%></td>
                 <td><%=list[i].title%></td>
-                <td><%=list[i].place%></td>
+                <td><%=list[i].area%></td>
+                <td><%=list[i].stadium%></td>
                 <td><%=list[i].year%></td>
                 <td><%=list[i].month%></td>
                 <td><%=list[i].day%></td>
@@ -57,8 +59,6 @@
 </body>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script>
-
-
     function onClickEventForTable() {
         $.each($('tr'), function (idx, item) {
             if (idx === 0) return true
@@ -100,7 +100,7 @@
                 <th>게시물번호</th>
                 <th>작성자</th>
                 <th>제목</th>
-                <th>장소</th>
+                <th colspan="2">장소</th>
                 <th colspan="3">날짜</th>
                 <th>시작시간</th>
                 <th>종료시간</th>
@@ -113,7 +113,8 @@
                     html += `<tr><td>${item.no}</td>`
                     html += `<td>${item.writer}</td>`
                     html += `<td>${item.title}</td>`
-                    html += `<td>${item.place}</td>`
+                    html += `<td>${item.area}</td>`
+                    html += `<td>${item.stadium}</td>`
                     html += `<td>${item.year}</td>`
                     html += `<td>${item.month}</td>`
                     html += `<td>${item.day}</td>`

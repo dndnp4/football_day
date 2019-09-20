@@ -10,12 +10,13 @@ function execption_url(url) {
   list.set('/step2',true)
   list.set('/login',true)
   list.set('/test',true)
+  list.set('/test/board',true)
   if(list.get(url)) return true
   else return false
 }
 
 router.all('*', function (req, res, next) {
-  console.log('user session : ',req.session.user)
+  console.log('\u001b[33m','user session : ',req.session.user)
   if(!req.session.user && !execption_url(req.url)){
     res.redirect('/login')
   }else {
@@ -135,4 +136,17 @@ router.post('/isVaildId', function (req, res, next) {
   })
 })
 
+//stadium
+router.get('/get_area',function(req,res,next){
+  db.selectArea(function(err, data){
+    res.json(data);
+  })  
+})
+router.get('/get_name',function(req,res,next){
+  var area = req.query.area;
+  console.log(area)
+  db.selectStadiumName(area, function(err, data){
+    res.json(data);
+  })  
+})
 module.exports = router;

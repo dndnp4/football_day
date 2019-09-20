@@ -27,12 +27,16 @@ router.post('/search', function (req, res, next) {
             })
             break;
 
-        case 'place':
-            db.selectMatchingByPlace(value, function (err, result) {
+        case 'area':
+            db.selectMatchingByArea(value, function (err, result) {
                 res.json(result)
             })
             break;
-
+        case 'stadium':
+            db.selectMatchingByStadium(value, function (err, result) {
+                res.json(result)
+            })
+            break;
         case 'date':
             db.selectMatchingByDate(value, value2, value3, function (err, result) {
                 res.json(result)
@@ -70,7 +74,7 @@ router.post('/search', function (req, res, next) {
 router.get('/get', function (req, res, next) {
     var a = req.query.no;
     db.selectGetMatching(a, function (err, list) {
-        res.render('matching/get', { list: list })
+        res.render('matching/get', { list: list, user:req.session.user })
     })
 })
 router.get('/modify', function (req, res, next) {
@@ -89,25 +93,11 @@ router.get('/delete', function (req, res, next) {
     res.redirect('/matching')
 })
 router.get('/write', function (req, res, next) {
-    res.render('matching/write')
+    res.render('matching/write',{user : req.session.user})
 })
 router.post('/write', function (req, res, next) {
     db.insertMatching(req.body)
     res.redirect('/matching')
-})
-
-//code for AJAX
-router.post("/isVaildTeam", function (req, res, next) {
-    var a = req.body.team_name
-    db.isVaildTeam(a, function (err, result) {
-        res.json(result);
-    })
-})
-router.post('/isVaildId', function (req, res, next) {
-    var a = req.body.id
-    db.isVaildId(a, function (err, result) {
-        res.json(result)
-    })
 })
 
 module.exports = router;

@@ -59,9 +59,10 @@ exports.insertMatching = (data) => {
         if (err) {
             console.log(err)
         } else {
-            let sql = `insert into matching_board (title,content,writer,place,year,month,day,time_from,time_to,person,age,level,due)
-                     values (?,?,?,?,?,?,?,?,?,?,?,?,?)`
-            connection.query(sql, [data.title, data.content, data.writer, data.place, data.year, data.month, data.day, data.time_from, data.time_to, data.person, data.age, data.level, data.due], (err, result) => {
+            
+            let sql = `insert into matching_board (title,content,writer,area,stadium,year,month,day,time_from,time_to,person,age,level,due)
+                     values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
+            connection.query(sql, [data.title, data.content, data.writer, data.area,data.stadium, data.year, data.month, data.day, data.time_from, data.time_to, data.person, data.age, data.level, data.due], (err, result) => {
                 connection.end()
             })
         }
@@ -191,7 +192,7 @@ exports.selectMatchingByWriter = (data, cb) => {
         }
     })
 }
-exports.selectMatchingByPlace = (data, cb) => {
+exports.selectMatchingByArea = (data, cb) => {
     const connection = mysql.createConnection({
         host: 'localhost',
         user: 'root',
@@ -203,7 +204,27 @@ exports.selectMatchingByPlace = (data, cb) => {
             console.log(err)
         } else {
             data = `%${data}%`
-            let sql = `select * from matching_board where place like ?`
+            let sql = `select * from matching_board where area like ?`
+            connection.query(sql, [data], (err, result) => {
+                cb(err, result)
+                connection.end()
+            })
+        }
+    })
+}
+exports.selectMatchingByStadium = (data, cb) => {
+    const connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'mysql',
+        database: 'football_day'
+    })
+    connection.connect((err) => {
+        if (err) {
+            console.log(err)
+        } else {
+            data = `%${data}%`
+            let sql = `select * from matching_board where stadium like ?`
             connection.query(sql, [data], (err, result) => {
                 cb(err, result)
                 connection.end()
@@ -364,9 +385,9 @@ exports.updateMatching = (data) => {
         if (err) {
             console.log(err)
         } else {
-            let sql = `update matching_board set title = ?,content = ?, place = ?, year = ?, month = ?, day = ?, time_from = ?, time_to = ?, person = ?, age = ?, level = ?, due = ? where no = ?`
+            let sql = `update matching_board set title = ?,content = ?, area=?, stadium = ?, year = ?, month = ?, day = ?, time_from = ?, time_to = ?, person = ?, age = ?, level = ?, due = ? where no = ?`
 
-            connection.query(sql, [data.title, data.content, data.place, data.year, data.month, data.day, data.time_from, data.time_to, data.person, data.age, data.level, data.due, data.no], (err, result) => {
+            connection.query(sql, [data.title, data.content, data.area,data.stadium, data.year, data.month, data.day, data.time_from, data.time_to, data.person, data.age, data.level, data.due, data.no], (err, result) => {
                 connection.end()
             })
         }
@@ -433,6 +454,7 @@ exports.selectRandTeam = (cb) => {
         }
     })
 }
+
 exports.selectRandMember = (cb) => {
     const connection = mysql.createConnection({
         host: 'localhost',
@@ -453,6 +475,27 @@ exports.selectRandMember = (cb) => {
         }
     })
 }
+exports.selectRandPlace = (cb) => {
+    const connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'mysql',
+        database: 'football_day'
+    })
+    connection.connect((err) => {
+        if (err) {
+            console.log(err)
+        } else {
+            let sql = `select * from stadium order by rand() limit 1`
+
+            connection.query(sql, (err, result) => {
+                cb(err, result)
+                connection.end()
+            })
+        }
+    })
+}
+
 exports.requestLogin = (mid,mpw, cb) => {
     const connection = mysql.createConnection({
         host: 'localhost',
@@ -470,6 +513,45 @@ exports.requestLogin = (mid,mpw, cb) => {
                 cb(err, rows)
             })
             connection.end()
+        }
+    })
+}
+exports.selectArea = (cb) => {
+    const connection = mysql.createConnection({
+        host : 'localhost',
+        user : 'root',
+        password : 'mysql',
+        database : 'football_day'
+    })
+    connection.connect((err)=>{
+        if(err){
+            console.log(err)
+        }else{
+            let sql = `SELECT DISTINCT(area) FROM stadium`
+            
+            connection.query(sql, (err, result)=>{
+                cb(err,result)
+                connection.end()
+            })
+        }
+    })
+}
+exports.selectStadiumName = (area, cb) => {
+    const connection = mysql.createConnection({
+        host : 'localhost',
+        user : 'root',
+        password : 'mysql',
+        database : 'football_day'
+    })
+    connection.connect((err)=>{
+        if(err){
+            console.log(err)
+        }else{
+            const sql = 'SELECT name FROM stadium WHERE area = ?'
+            connection.query(sql, [area], (err, rows) => {
+                cb(err, rows)
+                connection.end()
+            })
         }
     })
 }

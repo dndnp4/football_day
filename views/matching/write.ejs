@@ -6,11 +6,13 @@
 
 <body>
     <form method="post">
-        <input type='text' name='writer'><br>
+        <input type='text' name='writer' value="<%=user.id%>" readonly><br>
         <input type='text' name='title'><br>
         <input type='text' name='content'><br>
-        <input type='text' name='place'><br>
-        <input type='text' name='date'><br>
+        <select name='area' id='area'></select><select name='stadium' id='stadium'></select><br>
+        <input type='text' name='year'><br>
+        <input type='text' name='month'><br>
+        <input type='text' name='day'><br>
         <input type='text' name='time_from'><br>
         <input type='text' name='time_to'><br>
         <input type='text' name='person'><br>
@@ -22,6 +24,35 @@
 </body>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script>
+    $(document).ready(function(){
+        $.ajax({
+            url:'/get_area',
+            success:function(result){
+                var html = ''
+                for(var i = 0; i < result.length; i++){
+                    html += `<option value='${result[i].area}'>${result[i].area}</option>`
+                }
+                $('#area').append(html)
+            }
+        })
+    })
+    $('#area').on('change',function(){
+        var data = $('#area').val()
+        console.log(data)
+        $.ajax({
+            url:'/get_name',
+            data: {area:data},
+            dataType:'json',
+            success:function(result){
+                $('#stadium').empty()
+                var html = ''
+                for(var i = 0 ; i < result.length; i++){
+                    html += `<option value='${result[i].name}'>${result[i].name}</option>`
+                }
+                $('#stadium').append(html)
+            }
+        })
+    })
     $.each($('input[type=text]'), function (idx, item) {
         $(this).attr('placeholder', $(this).attr('name'))
     })
