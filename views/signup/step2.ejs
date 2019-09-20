@@ -3,17 +3,19 @@
 <html>
 
 <head>
+        <%- include ../design/login.ejs %>
 </head>
 <body>
-    <form id='form1' action = 'step2' method='post'>
+    <form action = 'step2' method='post' id='slick-login'>
         <input type='hidden' name='isTeam' value="<%=isTeam%>">
-        <input type="text" id='id' name="id" placeholder="id"><label id='msgbox'></label><br>
+        <input type="text" id='id' name="id" placeholder="id">
+        <label style='display: inline;color:white;'id='msgbox'></label><br>
         <input type="text" name="pw" placeholder="pw"><br>
         <input type="text" name="name" placeholder="name"><br>
         <input type="text" name="team_name" value="<%=team_name%>" readonly><br>
         <input type="text" name="account" placeholder="account"><br>
         <input type="text" name="wallet" placeholder="wallet"><br>
-        <input type='submit' value="hi">
+        <input type='submit' value="회원가입">
     </form>
 </body>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>

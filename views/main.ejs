@@ -2,12 +2,70 @@
 <html>
 
 <head>
+
+    <%- include design/main/main_header.ejs %>
+
 </head>
 
-<body>
-<a href="/matching">list</a> <br>
-<a href='/reconfirm'>mypage</a>
+<body id="page-top">
+    <!-- Services -->
+    <section class="content-section bg-primary text-white text-center" id="services"
+        style="padding-bottom: 500px; padding-top: 300px;">
+        <div class="container">
+            <div class="content-section-heading">
+
+                <h2 class="mb-5" style="text-align:center; padding-bottom: 100px">Football Day</h2>
+            </div>
+            <div>
+                <div class="row" style="padding-left: auto">
+                    <div class="col-lg-3 col-md-6 mb-5 mb-lg-0" style="text-align: center">
+                        <a href="matching">
+                            <span class="service-icon rounded-circle mx-auto mb-3">
+                                <i class="icon-trophy"></i>
+                            </span>
+                        </a>
+                        <h4>
+                            <strong> Team matching</strong>
+                        </h4>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
+                        <a href="#">
+                            <span class="service-icon rounded-circle mx-auto mb-3">
+                                <i class="icon-user"></i>
+                            </span>
+                        </a>
+                        <h4>
+                            <strong>Recruiting players</strong>
+                        </h4>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
+                        <a href="#">
+                            <span class="service-icon rounded-circle mx-auto mb-3">
+                                <i class="icon-people"></i>
+                            </span>
+                        </a>
+                        <h4>
+                            <strong>Recruiting team</strong>
+                        </h4>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
+                        <a href='/reconfirm'>
+                            <span class="service-icon rounded-circle mx-auto mb-3">
+                                <i class="icon-info"></i>
+                            </span>
+                        </a>
+                        <h4>
+                            <strong>My page</strong>
+                        </h4>
+
+                    </div>
+                </div>
+            </div>
+    </section>
+
+
 
 </body>
+<%- include design/main/main_footer.ejs %>
 
 </html>

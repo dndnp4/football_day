@@ -12,7 +12,6 @@ exports.insertMember = (data, team) => {
         if (err) {
             console.log(err)
         } else {
-
             if (team === 'true') {
                 this.updateTeamMember(data.team_name)
             } else {
@@ -32,7 +31,6 @@ exports.insertTeam = (data) => {
         password: 'mysql',
         database: 'football_day'
     })
-    console.log(data)
     connection.connect((err) => {
         if (err) {
             console.log(err)

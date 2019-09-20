@@ -2,14 +2,18 @@
 <html>
 
 <head>
+    <%- include ../design/login.ejs %>
 </head>
 
 <body>
-    <button type='button' onclick='isTeamFalse()'>신규등록</button>
-    <button type='button' onclick='isTeamTrue()'>팀검색</button><br>
-    <form action="step2" method="get">
+
+    <form action="step2" method="get" id='slick-login'>
+        <input type='button' onclick='isTeamFalse()' value='신규등록'>
+        <input type='button' onclick='isTeamTrue()' value='팀검색'>
         <input type='hidden' name='isTeam' id='isTeam'>
-        <input type='text' id='target' name='team_name'><br> <label id='msgbox'></label><br>
+        <input type='text' id='target' name='team_name'><br> 
+        <!-- <small style="font-size: 8px; color: #fff;" id='msgbox'></small><br> -->
+        <label style="display:inline ;color: #fff;" id='msgbox'></label><br>
         <input type='submit' id='step2' value="다음" disabled>
     </form>
 </body>
@@ -17,7 +21,7 @@
 <script>
     var isTeam
     var onNextStepBtn = false
-    function init(){
+    function init() {
         $('#target').val('')
         $('#msgbox').text('')
         onNextStepBtn = false
@@ -33,7 +37,7 @@
         $('#target').attr('placeholder', '기존 팀 검색')
         init()
     }
-    
+
     $('#target').on('keyup', function (key) {
 
         var input = $(this).val()
@@ -44,22 +48,23 @@
             dataType: 'json',
             success: function (data) {
                 if (isTeam) {
+                    
                     if (data.length > 0) {
                         $('#msgbox').text('ok')
-                        $('#step2').attr('disabled',false)
+                        $('#step2').attr('disabled', false)
                     }
                     else {
                         $('#msgbox').text('존재하지 않는 팀 이름')
-                        $('#step2').attr('disabled',true)
+                        $('#step2').attr('disabled', true)
                     }
                 } else {
                     if (data.length > 0) {
                         $('#msgbox').text('이미 존재하는 이름')
-                        $('#step2').attr('disabled',true)
+                        $('#step2').attr('disabled', true)
                     }
                     else {
                         $('#msgbox').text('사용가능한 이름')
-                        $('#step2').attr('disabled',false)
+                        $('#step2').attr('disabled', false)
                     }
                 }
             }

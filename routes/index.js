@@ -11,13 +11,20 @@ function execption_url(url) {
   list.set('/login',true)
   list.set('/test',true)
   list.set('/test/board',true)
+  list.set('/isVaildTeam',true)
+  list.set('/isVaildId',true)
   if(list.get(url)) return true
   else return false
 }
 
 router.all('*', function (req, res, next) {
   console.log('\u001b[33m','user session : ',req.session.user)
-  if(!req.session.user && !execption_url(req.url)){
+  //get으로 넘어온 파라미터가 있을경우 예외리스트에서 검색을 못함.. url에서 파라미터를 지운 string을 만듬
+  var point = req.url.indexOf('?')
+  var url = req.url
+  if(point > 0)  url = req.url.substring(0,req.url.indexOf('?'))
+  
+  if(!req.session.user && !execption_url(url)){
     res.redirect('/login')
   }else {
     next()
@@ -48,7 +55,7 @@ router.post('/step2', function (req, res, next) {
   var b = req.body.isTeam
 
   db.insertMember(req.body, b)
-  res.render('main')
+  res.redirect('/login')
 })
 router.get('/reconfirm', function (req, res, next) {
   res.render('reconfirm', { uid: req.session.user.id })
@@ -125,6 +132,7 @@ router.get('/logout', function (req, res, next) {
 //팀이름 유효성검사
 router.post("/isVaildTeam", function (req, res, next) {
   var a = req.body.team_name
+  console.log(a)
   db.isVaildTeam(a, function (err, result) {
     res.json(result);
   })
@@ -144,7 +152,6 @@ router.get('/get_area',function(req,res,next){
 })
 router.get('/get_name',function(req,res,next){
   var area = req.query.area;
-  console.log(area)
   db.selectStadiumName(area, function(err, data){
     res.json(data);
   })  
