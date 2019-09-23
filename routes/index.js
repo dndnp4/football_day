@@ -11,6 +11,8 @@ function execption_url(url) {
   list.set('/login',true)
   list.set('/test',true)
   list.set('/test/board',true)
+  list.set('/test/user',true)
+  list.set('/test/team',true)
   list.set('/isVaildTeam',true)
   list.set('/isVaildId',true)
   if(list.get(url)) return true
@@ -22,7 +24,7 @@ router.all('*', function (req, res, next) {
   //get으로 넘어온 파라미터가 있을경우 예외리스트에서 검색을 못함.. url에서 파라미터를 지운 string을 만듬
   var point = req.url.indexOf('?')
   var url = req.url
-  if(point > 0)  url = req.url.substring(0,req.url.indexOf('?'))
+  if(point > 0)  url = req.url.substring(0,point)
   
   if(!req.session.user && !execption_url(url)){
     res.redirect('/login')
